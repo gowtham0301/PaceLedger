@@ -17,8 +17,14 @@ app.get('/', (req, res) => {
   res.send('PaceLedger backend is alive!')
 })
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  process.env.CLIENT_URL
+].filter(Boolean)
+
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+  origin: allowedOrigins
 }))
 app.use(express.json({ limit: '100kb' }))
 
@@ -49,7 +55,7 @@ async function startServer() {
     console.log('MongoDB connected successfully')
 
     app.listen(PORT, () => {
-      console.log(`PaceLedger API running at http://localhost:${PORT}`)
+      console.log(`PaceLedger API running on port ${PORT}`)
     })
   } catch (error) {
     console.error('Database connection failed:', error.message)
